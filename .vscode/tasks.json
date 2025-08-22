@@ -1,0 +1,17 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "go",
+      "label": "build",
+      "command": "build",
+      "args": [
+        "-o",
+        "${workspaceFolder}/bin/provide.exe",
+        "${workspaceFolder}/src"
+      ],
+      "problemMatcher": ["$go"],
+      "group": "build"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "debug.javascript.defaultRuntimeExecutable": {
+    "pwa-node": "C:\\Users\\Administrator\\AppData\\Local\\mise\\installs\\node\\22.12.0\\node"
+  },
+  "python.defaultInterpreterPath": "C:\\Users\\Administrator\\AppData\\Local\\mise\\installs\\python\\3.13.1\\python.exe",
+  "go.goroot": "C:\\Users\\Administrator\\AppData\\Local\\mise\\installs\\go\\1.24.5",
+  "go.alternateTools": {
+    "go": "C:\\Users\\Administrator\\AppData\\Local\\mise\\installs\\go\\1.24.5\\bin\\go",
+    "dlv": "C:\\Users\\Administrator\\AppData\\Local\\mise\\installs\\go\\1.24.5\\bin\\dlv.exe",
+    "gopls": "C:\\Users\\Administrator\\AppData\\Local\\mise\\installs\\go\\1.24.5\\bin\\gopls.exe"
+  }
+}
