@@ -34,6 +34,7 @@ module.exports = {
 	os.MkdirAll(fpath, 0755)
 
 	for k, v := range data {
-		os.WriteFile(filepath.Join(fpath, v+".js"), []byte(fmt.Sprintf(temp, k, v)), 0644)
+		v := removeGarbage(v)
+		os.WriteFile(filepath.Join(fpath, v+".js"), fmt.Appendf(nil, temp, k, v), 0644)
 	}
 }
