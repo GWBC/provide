@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/url"
 	"sync"
 	"time"
 )
@@ -12,7 +13,7 @@ func check(name string, url string) bool {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	rsp := Get(ctx, url+"?ac=list")
+	rsp := Get(ctx, url+"?ac=list&wd=.")
 	if len(rsp) == 0 {
 		return false
 	}
@@ -34,21 +35,34 @@ func Filter(data map[string]string) map[string]string {
 
 	lock := sync.Mutex{}
 	ret := map[string]string{}
+	domain := map[string]bool{}
 
-	for url, name := range data {
+	for strUrl, name := range data {
 		wg.Add(1)
-		go func(name string, url string) {
+		go func(name string, strUrl string) {
 			defer func() {
 				<-semaphore
 				wg.Done()
 			}()
 
-			if check(name, url) {
+			if check(name, strUrl) {
+				urlObj, err := url.Parse(strUrl)
+				if err != nil {
+					fmt.Println("地址解析失败:", strUrl)
+					return
+				}
+
 				lock.Lock()
-				ret[url] = name
-				lock.Unlock()
+				defer lock.Unlock()
+
+				if domain[urlObj.Host] {
+					return
+				}
+
+				ret[strUrl] = name
+				domain[urlObj.Host] = true
 			}
-		}(name, url)
+		}(name, strUrl)
 
 		semaphore <- true
 	}
