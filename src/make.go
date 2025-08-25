@@ -34,7 +34,8 @@ module.exports = {
 	os.MkdirAll(fpath, 0755)
 
 	for k, v := range data {
-		v := removeGarbage(v)
+		v = removeGarbage(v)
+		v = removeAllWhitespace(v)
 		os.WriteFile(filepath.Join(fpath, v+".js"), fmt.Appendf(nil, temp, k, v), 0644)
 	}
 }

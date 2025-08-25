@@ -55,7 +55,7 @@ func parseTvbox(url string) map[string]string {
 
 	datas := map[string]string{}
 
-	rsp := Get(ctx, url)
+	rsp := Get(ctx, url, 2)
 	if len(rsp) == 0 {
 		return datas
 	}
@@ -95,7 +95,7 @@ func Tvbox() map[string]string {
 		}
 	}
 
-	htmlData := Get(context.Background(), "https://github.com/guxiangbin/tvbox2")
+	htmlData := Get(context.Background(), "https://github.com/guxiangbin/tvbox2", 2)
 	doc, err := html.Parse(strings.NewReader(htmlData))
 	if err != nil {
 		return datas

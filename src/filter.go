@@ -13,7 +13,7 @@ func check(name string, url string) bool {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	rsp := Get(ctx, url+"?ac=list&wd=.")
+	rsp := Get(ctx, url+"?ac=videolist&wd=.", 2)
 	if len(rsp) == 0 {
 		return false
 	}

@@ -13,35 +13,48 @@ import (
 	"unicode"
 )
 
-func Get(ctx context.Context, url string) string {
-	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
-	if err != nil {
-		return ""
+func Get(ctx context.Context, url string, retry int) string {
+	for range retry + 1 {
+		req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
+		if err != nil {
+			return ""
+		}
+
+		req.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0")
+
+		transport := &http.Transport{
+			TLSClientConfig: &tls.Config{
+				InsecureSkipVerify: true,
+			},
+		}
+
+		cli := &http.Client{
+			Transport: transport,
+		}
+
+		resp, err := cli.Do(req)
+		if err != nil {
+			continue
+		}
+
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			continue
+		}
+
+		return string(body)
 	}
 
-	req.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0")
+	return ""
+}
 
-	transport := &http.Transport{
-		TLSClientConfig: &tls.Config{
-			InsecureSkipVerify: true,
-		},
-	}
-
-	cli := &http.Client{
-		Transport: transport,
-	}
-
-	resp, err := cli.Do(req)
-	if err != nil {
-		return ""
-	}
-
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return ""
-	}
-
-	return string(body)
+func removeAllWhitespace(s string) string {
+	return strings.Map(func(r rune) rune {
+		if unicode.IsSpace(r) {
+			return -1
+		}
+		return r
+	}, s)
 }
 
 func removeComments(datas string) string {
