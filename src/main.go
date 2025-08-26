@@ -1,11 +1,19 @@
 package main
 
-import "maps"
+import (
+	"flag"
+	"maps"
+)
 
 func main() {
+	isTvbox := flag.Bool("tvbox", false, "抓取tvbox")
 	zy := ParseZy()
-	tvbox := Tvbox()
-	maps.Copy(zy, tvbox)
+
+	if *isTvbox {
+		tvbox := Tvbox()
+		maps.Copy(zy, tvbox)
+	}
+
 	zy = Filter(zy)
 	GenJSFile(zy)
 }
