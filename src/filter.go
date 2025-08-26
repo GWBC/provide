@@ -9,11 +9,16 @@ import (
 	"time"
 )
 
-func check(name string, url string) bool {
+func check(name string, strUrl string) bool {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	rsp := Get(ctx, url+"?ac=videolist&wd=.", 2)
+	params := url.Values{}
+	params.Add("ac", "videolist")
+	params.Add("wd", "侏罗纪")
+
+	strUrl += "?" + params.Encode()
+	rsp := Get(ctx, strUrl, 2)
 	if len(rsp) == 0 {
 		return false
 	}
@@ -25,6 +30,15 @@ func check(name string, url string) bool {
 	}
 
 	_, ok := data["code"]
+	if ok {
+		count := AnyToNumber(data["total"])
+		if count > 200 {
+			ok = false
+		}
+	} else {
+		fmt.Println(name, strUrl, "数据错误")
+	}
+
 	fmt.Println(name, "检测:", ok)
 	return ok
 }

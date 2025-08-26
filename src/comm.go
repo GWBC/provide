@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"unicode"
 )
@@ -118,4 +119,47 @@ func removeGarbage(s string) string {
 	}
 
 	return string(result)
+}
+
+func AnyToNumber(value any) float64 {
+	if value == nil {
+		return 0
+	}
+
+	switch v := value.(type) {
+	case int:
+		return float64(v)
+	case int8:
+		return float64(v)
+	case int16:
+		return float64(v)
+	case int32:
+		return float64(v)
+	case int64:
+		return float64(v)
+	case uint:
+		return float64(v)
+	case uint8:
+		return float64(v)
+	case uint16:
+		return float64(v)
+	case uint32:
+		return float64(v)
+	case uint64:
+		return float64(v)
+	case float32:
+		return float64(v)
+	case float64:
+		return v
+	case string:
+		if f, err := strconv.ParseFloat(v, 64); err == nil {
+			return f
+		}
+		if i, err := strconv.ParseInt(v, 10, 64); err == nil {
+			return float64(i)
+		}
+		return 0
+	}
+
+	return 0
 }
