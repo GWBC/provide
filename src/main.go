@@ -6,10 +6,12 @@ import (
 )
 
 func main() {
-	isTvbox := flag.Bool("tvbox", false, "抓取tvbox")
+	enableTvbox := flag.Bool("tvbox", false, "抓取tvbox")
+	flag.Parse()
+
 	zy := ParseZy()
 
-	if *isTvbox {
+	if *enableTvbox {
 		tvbox := Tvbox()
 		maps.Copy(zy, tvbox)
 	}
